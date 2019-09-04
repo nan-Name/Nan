@@ -22,29 +22,21 @@ public class DevLoginController {
 	
 	@RequestMapping(value="/login")
 	public String login(){
-		logger.debug("LoginController welcome AppInfoSystem develpor==================");
 		return "devlogin";
 	}
 	
 	@RequestMapping(value="/dologin",method=RequestMethod.POST)
 	public String doLogin(@RequestParam String devCode,@RequestParam String devPassword,HttpServletRequest request,HttpSession session){
-		logger.debug("doLogin====================================");
-		//调用service方法，进行用户匹配
-		System.out.println();
 		DevUser user = null;
 		try {
 			user = devUserService.login(devCode,devPassword);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(null != user){//登录成功
-			//放入session
+		if(null != user){
 			session.setAttribute(Constants.DEV_USER_SESSION, user);
-			//页面跳转（main.jsp）
 			return "redirect:/dev/flatform/main";
 		}else{
-			//页面跳转（login.jsp）带出提示信息--转发
 			request.setAttribute("error", "用户名或密码不正确");
 			return "devlogin";
 		}
@@ -60,7 +52,6 @@ public class DevLoginController {
 	
 	@RequestMapping(value="/logout")
 	public String logout(HttpSession session){
-		//清除session
 		session.removeAttribute(Constants.DEV_USER_SESSION);
 		return "devlogin";
 	}
